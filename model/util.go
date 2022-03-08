@@ -149,18 +149,3 @@ func RetrieveMessagesByUserID(userID uint) (user User, err error) {
 	err = db.Preload("TemplateMessages").Preload("PlainTextMessages").Preload("TextCardMessages").First(&user, userID).Error
 	return
 }
-
-func RetrieveTemplateMessagesByUserID(userID uint) (user User, err error) {
-	err = db.Preload("TemplateMessages").Limit(20).First(&user, userID).Error
-	return
-}
-
-func RetrieveTextCardMessagesByUserID(userID uint) (user User, err error) {
-	err = db.Preload("TextCardMessages").Limit(20).First(&user, userID).Error
-	return
-}
-
-func RetrievePlainTextMessagesByUserID(userID uint) (user User, err error) {
-	err = db.Preload("PlainTextMessages").Limit(20).First(&user, userID).Error
-	return
-}

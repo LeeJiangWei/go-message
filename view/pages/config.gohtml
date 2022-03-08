@@ -42,126 +42,160 @@
                     </li>
                 </ul>
             </div>
-            <form id="user" class="box content-tab" action="/api/user" method="post">
-                <div class="field">
-                    <label class="label">用户名</label>
-                    <div class="control">
-                        <input id="userName" class="input" name="name" type="text" placeholder="请输入用户名"
-                               value="{{ .User.Name }}">
+            <div id="user" class="container content-tab">
+                <form class="box" action="/api/user" method="post">
+                    <div class="field">
+                        <label class="label">用户名</label>
+                        <article class="message">
+                            <div class="message-body">
+                                消息推送用户前缀和用户名一致。
+                            </div>
+                        </article>
+                        <div class="control">
+                            <input id="userName" class="input" name="name" type="text" placeholder="请输入用户名"
+                                   value="{{ .User.Name }}">
+                        </div>
                     </div>
-                </div>
-                <div class="field">
-                    <label class="label">密码</label>
-                    <div class="control">
-                        <input id="userPassword" class="input" name="text" type="text" placeholder="未改变">
+                    <div class="field">
+                        <label class="label">密码</label>
+                        <div class="control">
+                            <input id="userPassword" class="input" name="text" type="text" placeholder="未改变">
+                        </div>
                     </div>
-                </div>
-                <div class="field">
-                    <label class="label">消息推送 Token</label>
-                    <div class="control">
-                        <input id="userToken" class="input" name="token" type="text" placeholder="请输入用于推送消息的 Token"
-                               value="{{ .User.Token }}">
+                    <div class="field">
+                        <label class="label">消息推送 Token</label>
+                        <article class="message">
+                            <div class="message-body">
+                                用于防止未授权者利用本系统向你发送消息，在推送消息时需要携带此字段。
+                            </div>
+                        </article>
+                        <div class="control">
+                            <input id="userToken" class="input" name="token" type="text" placeholder="请输入用于推送消息的 Token"
+                                   value="{{ .User.Token }}">
+                        </div>
                     </div>
-                </div>
-                <div class="field is-grouped is-grouped-right">
-                    <div class="control">
-                        <input type="submit" class="button is-primary" value="修改">
+                    <div class="field is-grouped is-grouped-right">
+                        <div class="control">
+                            <input type="submit" class="button is-primary" value="修改">
+                        </div>
+                        <div class="control">
+                            <input type="reset" class="button is-light" value="重置">
+                        </div>
                     </div>
-                    <div class="control">
-                        <input type="reset" class="button is-light" value="重置">
+                </form>
+            </div>
+            <div id="app" class="container content-tab" style="display: none">
+                <article class="message">
+                    <div class="message-body">
+                        <p>请参考文档以及以下链接完成配置：</p>
+                        <a target="_blank"
+                           href="https://mp.weixin.qq.com/debug/cgi-bin/sandboxinfo?action=showinfo&t=sandbox/index">
+                            微信公众平台
+                        </a>
                     </div>
-                </div>
-            </form>
-            <form id="app" class="box content-tab" style="display: none" action="/api/app" method="post">
-                <div class="field">
-                    <label class="label">appID</label>
-                    <div class="control">
-                        <input id="appAppID" class="input" name="appID" type="text" placeholder="请输入 appID"
-                               value="{{ .User.App.AppID}}">
+                </article>
+                <form class="box " action="/api/app" method="post">
+                    <div class="field">
+                        <label class="label">appID</label>
+                        <div class="control">
+                            <input id="appAppID" class="input" name="appID" type="text" placeholder="请输入 appID"
+                                   value="{{ .User.App.AppID}}">
+                        </div>
                     </div>
-                </div>
-                <div class="field">
-                    <label class="label">appsecret</label>
-                    <div class="control">
-                        <input id="appAppSecret" class="input" name="appSecret" type="text"
-                               placeholder="请输入 appsecret" value="{{ .User.App.AppSecret }}">
+                    <div class="field">
+                        <label class="label">appsecret</label>
+                        <div class="control">
+                            <input id="appAppSecret" class="input" name="appSecret" type="text"
+                                   placeholder="请输入 appsecret" value="{{ .User.App.AppSecret }}">
+                        </div>
                     </div>
-                </div>
-                <div class="field">
-                    <label class="label">接口配置 Token</label>
-                    <div class="control">
-                        <input id="appVerifyToken" class="input" name="verifyToken" type="text"
-                               placeholder="请输入接口配置 Token" value="{{ .User.App.VerifyToken }}">
+                    <div class="field">
+                        <label class="label">接口配置 Token</label>
+                        <div class="control">
+                            <input id="appVerifyToken" class="input" name="verifyToken" type="text"
+                                   placeholder="请输入接口配置 Token" value="{{ .User.App.VerifyToken }}">
+                        </div>
                     </div>
-                </div>
-                <div class="field">
-                    <label class="label">模板 ID</label>
-                    <div class="control">
-                        <input id="appTemplateID" class="input" name="templateID" type="text"
-                               placeholder="请输入模板 ID" value="{{ .User.App.TemplateID }}">
+                    <div class="field">
+                        <label class="label">模板 ID</label>
+                        <div class="control">
+                            <input id="appTemplateID" class="input" name="templateID" type="text"
+                                   placeholder="请输入模板 ID" value="{{ .User.App.TemplateID }}">
+                        </div>
                     </div>
-                </div>
-                <div class="field">
-                    <label class="label">接收者 ID</label>
-                    <div class="control">
-                        <input id="appReceiverID" class="input" name="receiverID" type="text"
-                               placeholder="请输入接收者 ID" value="{{ .User.App.ReceiverID }}">
+                    <div class="field">
+                        <label class="label">接收者 ID</label>
+                        <div class="control">
+                            <input id="appReceiverID" class="input" name="receiverID" type="text"
+                                   placeholder="请输入接收者 ID" value="{{ .User.App.ReceiverID }}">
+                        </div>
                     </div>
-                </div>
-                <div class="field is-grouped is-grouped-right">
-                    <div class="control">
-                        <input type="submit" class="button is-primary" value="修改">
+                    <div class="field is-grouped is-grouped-right">
+                        <div class="control">
+                            <input type="submit" class="button is-primary" value="修改">
+                        </div>
+                        <div class="control">
+                            <input type="reset" class="button is-light" value="重置">
+                        </div>
                     </div>
-                    <div class="control">
-                        <input type="reset" class="button is-light" value="重置">
+                </form>
+            </div>
+            <div id="corp" class="container content-tab" style="display:none;">
+                <article class="message">
+                    <div class="message-body">
+                        <p>请参考文档以及以下链接完成配置：</p>
+                        <a target="_blank" href="https://work.weixin.qq.com/">注册企业微信号</a><br>
+                        <a target="_blank" href="https://work.weixin.qq.com/wework_admin/frame#profile/wxPlugin">扫码关注微信插件</a><br>
+                        <a target="_blank"
+                           href="https://work.weixin.qq.com/wework_admin/frame#apps">创建一个应用</a>
                     </div>
-                </div>
-            </form>
-            <form id="corp" class="box content-tab" style="display:none;" action="/api/corp" method="post">
-                <div class="field">
-                    <label class="label">企业 ID</label>
-                    <div class="control">
-                        <input id="corpCorpID" class="input" name="corpID" type="text"
-                               placeholder="请输入企业 ID" value="{{ .User.Corp.CorpID }}">
+                </article>
+                <form class="box" action="/api/corp" method="post">
+                    <div class="field">
+                        <label class="label">企业 ID</label>
+                        <div class="control">
+                            <input id="corpCorpID" class="input" name="corpID" type="text"
+                                   placeholder="请输入企业 ID" value="{{ .User.Corp.CorpID }}">
+                        </div>
                     </div>
-                </div>
-                <div class="field">
-                    <label class="label">企业应用 AgentId</label>
-                    <div class="control">
-                        <input id="corpAgentID" class="input" name="agentID" type="text"
-                               placeholder="请输入企业应用 AgentId" value="{{ .User.Corp.AgentID }}">
+                    <div class="field">
+                        <label class="label">企业应用 AgentId</label>
+                        <div class="control">
+                            <input id="corpAgentID" class="input" name="agentID" type="text"
+                                   placeholder="请输入企业应用 AgentId" value="{{ .User.Corp.AgentID }}">
+                        </div>
                     </div>
-                </div>
-                <div class="field">
-                    <label class="label">企业应用 Secret</label>
-                    <div class="control">
-                        <input id="corpAgentSecret" class="input" name="agentSecret" type="text"
-                               placeholder="请输入企业应用 Secret" value="{{ .User.Corp.AgentSecret }}">
+                    <div class="field">
+                        <label class="label">企业应用 Secret</label>
+                        <div class="control">
+                            <input id="corpAgentSecret" class="input" name="agentSecret" type="text"
+                                   placeholder="请输入企业应用 Secret" value="{{ .User.Corp.AgentSecret }}">
+                        </div>
                     </div>
-                </div>
-                <div class="field">
-                    <label class="label">接收者 ID</label>
-                    <div class="control">
-                        <input id="corpReceiverID" class="input" name="receiverID" type="text"
-                               placeholder="请输入接收者 ID" value="{{ .User.Corp.ReceiverID }}">
+                    <div class="field">
+                        <label class="label">接收者 ID</label>
+                        <div class="control">
+                            <input id="corpReceiverID" class="input" name="receiverID" type="text"
+                                   placeholder="请输入接收者 ID" value="{{ .User.Corp.ReceiverID }}">
+                        </div>
                     </div>
-                </div>
-                <div class="field">
-                    <label class="label">卡片消息默认 URL</label>
-                    <div class="control">
-                        <input id="corpCardUrl" class="input" name="cardUrl" type="url"
-                               placeholder="卡片消息默认 URL" value="{{ .User.Corp.CardUrl }}">
+                    <div class="field">
+                        <label class="label">卡片消息默认 URL</label>
+                        <div class="control">
+                            <input id="corpCardUrl" class="input" name="cardUrl" type="url"
+                                   placeholder="卡片消息默认 URL" value="{{ .User.Corp.CardUrl }}">
+                        </div>
                     </div>
-                </div>
-                <div class="field is-grouped is-grouped-right">
-                    <div class="control">
-                        <input type="submit" class="button is-primary" value="修改">
+                    <div class="field is-grouped is-grouped-right">
+                        <div class="control">
+                            <input type="submit" class="button is-primary" value="修改">
+                        </div>
+                        <div class="control">
+                            <input type="reset" class="button is-light" value="重置">
+                        </div>
                     </div>
-                    <div class="control">
-                        <input type="reset" class="button is-light" value="重置">
-                    </div>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
     </section>
     </body>
