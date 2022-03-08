@@ -26,7 +26,7 @@ func PushTemplateMessage(ctx *gin.Context) {
 	template, err := wechat.BuildTemplateMessage(user.App.ReceiverID, user.App.TemplateID, from, desc, remark)
 	if err != nil {
 		log.Println(err.Error())
-		ctx.String(http.StatusInternalServerError, "Error occurred when building message.")
+		ctx.String(http.StatusInternalServerError, err.Error())
 		return
 	}
 
@@ -36,7 +36,7 @@ func PushTemplateMessage(ctx *gin.Context) {
 	if err != nil {
 		// 未能推送至微信服务器
 		log.Println("Error occurred when pushing message: ", err.Error())
-		ctx.String(http.StatusInternalServerError, "Error occurred when pushing message.")
+		ctx.String(http.StatusInternalServerError, err.Error())
 
 		_, dbErr := model.CreateTemplateMessage(user.ID, from, desc, remark, err.Error())
 		if dbErr != nil {
@@ -46,7 +46,7 @@ func PushTemplateMessage(ctx *gin.Context) {
 	} else if res.ErrCode != 0 {
 		// 微信服务器返回错误
 		log.Println("Error occurred when pushing message: ", res.ErrCode, res.ErrMsg)
-		ctx.String(http.StatusInternalServerError, res.ErrMsg)
+		ctx.String(http.StatusInternalServerError, "Wechat Server: " + res.ErrMsg)
 
 		_, dbErr := model.CreateTemplateMessage(user.ID, from, desc, remark, res.ErrMsg)
 		if dbErr != nil {
@@ -58,7 +58,7 @@ func PushTemplateMessage(ctx *gin.Context) {
 		_, dbErr := model.CreateTemplateMessage(user.ID, from, desc, remark, "success")
 		if dbErr != nil {
 			log.Println("DB Error occurred when creating message: ", dbErr.Error())
-			ctx.String(http.StatusInternalServerError, "Failed to insert message to DB.")
+			ctx.String(http.StatusInternalServerError, dbErr.Error())
 		} else {
 			ctx.String(http.StatusOK, "ok")
 		}
@@ -78,7 +78,7 @@ func PushPlainTextMessage(ctx *gin.Context) {
 	plainText, err := wechat.BuildPlainTextMessage(user.Corp.ReceiverID, user.Corp.AgentID, content)
 	if err != nil {
 		log.Println(err.Error())
-		ctx.String(http.StatusInternalServerError, "Error occurred when building message.")
+		ctx.String(http.StatusInternalServerError, err.Error())
 		return
 	}
 
@@ -87,17 +87,16 @@ func PushPlainTextMessage(ctx *gin.Context) {
 	if err != nil {
 		// 未能推送至微信服务器
 		log.Println(err.Error())
-		ctx.String(http.StatusInternalServerError, "Error occurred when pushing message.")
+		ctx.String(http.StatusInternalServerError, err.Error())
 
 		_, dbErr := model.CreatePlainTextMessage(user.ID, content, err.Error())
 		if dbErr != nil {
 			log.Println("DB Error occurred when creating message: ", dbErr.Error())
 		}
-
 	} else if res.ErrCode != 0 {
 		// 微信服务器返回错误
 		log.Println(res.ErrCode, res.ErrMsg)
-		ctx.String(http.StatusInternalServerError, res.ErrMsg)
+		ctx.String(http.StatusInternalServerError, "Wechat Server: "+res.ErrMsg)
 
 		_, dbErr := model.CreatePlainTextMessage(user.ID, content, res.ErrMsg)
 		if dbErr != nil {
@@ -109,7 +108,7 @@ func PushPlainTextMessage(ctx *gin.Context) {
 		_, dbErr := model.CreatePlainTextMessage(user.ID, content, "success")
 		if dbErr != nil {
 			log.Println("DB Error occurred when creating message: ", dbErr.Error())
-			ctx.String(http.StatusInternalServerError, "Failed to insert message to DB.")
+			ctx.String(http.StatusInternalServerError, dbErr.Error())
 		} else {
 			ctx.String(http.StatusOK, "ok")
 		}
@@ -137,7 +136,7 @@ func PushTextCardMessage(ctx *gin.Context) {
 	textCard, err := wechat.BuildTextCardMessage(user.Corp.ReceiverID, user.Corp.AgentID, title, desc, u)
 	if err != nil {
 		log.Println(err.Error())
-		ctx.String(http.StatusInternalServerError, "Error occurred when building message.")
+		ctx.String(http.StatusInternalServerError, err.Error())
 		return
 	}
 
@@ -146,7 +145,7 @@ func PushTextCardMessage(ctx *gin.Context) {
 	if err != nil {
 		// 未能推送至微信服务器
 		log.Println(err.Error())
-		ctx.String(http.StatusInternalServerError, "Error occurred when pushing message.")
+		ctx.String(http.StatusInternalServerError, err.Error())
 
 		_, dbErr := model.CreateTextCardMessage(user.ID, title, desc, u, err.Error())
 		if dbErr != nil {
@@ -156,7 +155,7 @@ func PushTextCardMessage(ctx *gin.Context) {
 	} else if res.ErrCode != 0 {
 		// 微信服务器返回错误
 		log.Println(res.ErrCode, res.ErrMsg)
-		ctx.String(http.StatusInternalServerError, res.ErrMsg)
+		ctx.String(http.StatusInternalServerError, "Wechat Server: "+res.ErrMsg)
 
 		_, dbErr := model.CreateTextCardMessage(user.ID, title, desc, u, res.ErrMsg)
 		if dbErr != nil {
@@ -168,7 +167,7 @@ func PushTextCardMessage(ctx *gin.Context) {
 		_, dbErr := model.CreateTextCardMessage(user.ID, title, desc, u, "success")
 		if dbErr != nil {
 			log.Println("DB Error occurred when creating message: ", dbErr.Error())
-			ctx.String(http.StatusInternalServerError, "Failed to insert message to DB.")
+			ctx.String(http.StatusInternalServerError, dbErr.Error())
 		} else {
 			ctx.String(http.StatusOK, "ok")
 		}

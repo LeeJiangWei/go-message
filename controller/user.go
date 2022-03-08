@@ -95,7 +95,7 @@ func UpdateUserApp(ctx *gin.Context) {
 	_, err := model.CreateOrUpdateUserApp(userID, appID, appSecret, templateID, receiverID, verifyToken)
 	if err != nil {
 		log.Println(err.Error())
-		ctx.String(http.StatusBadRequest, "Can not create app.")
+		ctx.String(http.StatusBadRequest, err.Error())
 		return
 	}
 	ctx.String(http.StatusOK, "ok")
@@ -118,7 +118,7 @@ func UpdateUserCorp(ctx *gin.Context) {
 	_, err := model.CreateOrUpdateUserCorp(userID, corpID, agentID, agentSecret, receiverID, cardUrl)
 	if err != nil {
 		log.Println(err.Error())
-		ctx.String(http.StatusBadRequest, "Can not create corp.")
+		ctx.String(http.StatusBadRequest, err.Error())
 		return
 	}
 	ctx.String(http.StatusOK, "ok")

@@ -30,7 +30,7 @@ func Message(ctx *gin.Context) {
 	user, err := model.RetrieveMessagesByUserID(u.ID)
 	if err != nil {
 		log.Println(err.Error())
-		ctx.String(http.StatusInternalServerError, "Unable to query database.")
+		ctx.String(http.StatusInternalServerError, err.Error())
 		return
 	}
 	ctx.HTML(http.StatusOK, "pages/message.gohtml", gin.H{
