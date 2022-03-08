@@ -1,0 +1,82 @@
+{{ define "partials/navbar.gohtml" }}
+    <nav class="navbar" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand">
+            <a class="navbar-item is-size-5" href="/" style="font-weight: bold">
+                微信消息推送系统
+            </a>
+
+            <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false"
+               data-target="navbarBasicExample">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+
+        <div id="navbarBasicExample" class="navbar-menu">
+            <div class="navbar-start">
+                <a class="navbar-item">
+                    文档
+                </a>
+
+                <a class="navbar-item">
+                    关于
+                </a>
+
+            </div>
+
+            <div class="navbar-end">
+                <div class="navbar-item">
+                    <div id="option-buttons" class="buttons">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <script>
+        const JWTStore = JSON.parse(window.localStorage.getItem("JWT"))
+        const buttons = document.getElementById("option-buttons")
+        const now = new Date()
+
+        logOut = () => {
+            window.localStorage.removeItem("JWT")
+            window.location.href = "/"
+        }
+
+        if (JWTStore === null || now.getTime() > JWTStore.expiredAt) {
+            buttons.innerHTML = `
+                <a class="button is-primary" href="/login">
+                    <strong>登录</strong>
+                </a>
+                <a class="button is-light" href="/signup">
+                    注册
+                </a>
+            `
+        } else {
+            buttons.innerHTML = `
+                <a class="button is-light" href="/config?token=${JWTStore.JWT}">
+                    配置
+                </a>
+                <a class="button is-light" href="/message?token=${JWTStore.JWT}">
+                    消息
+                </a>
+                <a class="button is-danger" onclick="logOut()">
+                    登出
+                </a>
+            `
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+            if ($navbarBurgers.length > 0) {
+                $navbarBurgers.forEach( el => {
+                    el.addEventListener('click', () => {
+                        const target = el.dataset.target;
+                        const $target = document.getElementById(target);
+                        el.classList.toggle('is-active');
+                        $target.classList.toggle('is-active');
+                    });
+                });
+            }
+        });
+    </script>
+{{ end }}

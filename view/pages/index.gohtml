@@ -1,0 +1,35 @@
+{{ define "pages/index.gohtml" }}
+    <!DOCTYPE html>
+    <html lang="zh">
+    {{ template "partials/header.gohtml" }}
+    <body>
+    {{ template "partials/navbar.gohtml" }}
+    <section class="section">
+        <div class="container">
+            <h1 class="title">
+                Hello
+            </h1>
+            <p class="subtitle">
+                From: 微信消息推送系统
+            </p>
+        </div>
+    </section>
+    <section>
+        <div class="container">
+            <div class="columns">
+                <article class="column message is-light">
+                    <div class="message-header">
+                        <p>运行状态</p>
+                    </div>
+                    <div class="message-body">
+                        <p>系统内存占用：{{ .Sys }} MB</p>
+                        <p>堆上已分配：{{ .Alloc }} MB</p>
+                        <p>累计已分配：{{ .TotalAlloc }} MB</p>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+    </body>
+    </html>
+{{ end }}

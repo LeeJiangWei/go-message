@@ -1,0 +1,10 @@
+{{ define "partials/message.gohtml" }}
+    <article id="message" class="message is-danger" style="display: none">
+        <div class="message-header">
+            <p>Info</p>
+        </div>
+        <div id="message-body" class="message-body">
+            {{ .Message }}
+        </div>
+    </article>
+{{ end }}

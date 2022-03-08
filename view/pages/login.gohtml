@@ -1,0 +1,81 @@
+{{ define "pages/login.gohtml" }}
+    <!DOCTYPE html>
+    <html lang="zh">
+    {{ template "partials/header.gohtml" }}
+    <body>
+    {{ template "partials/navbar.gohtml" }}
+    <section class="section">
+        <div class="container">
+            <h1 class="title">
+                登录
+            </h1>
+        </div>
+    </section>
+    <section>
+        <div class="container">
+            {{ template "partials/message.gohtml" }}
+            <form id="login" class="box" action="/auth" method="post">
+                <div class="field">
+                    <label class="label">用户名</label>
+                    <div class="control">
+                        <input id="name" class="input" type="text" required placeholder="请输入用户名">
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label">密码</label>
+                    <div class="control">
+                        <input id="password" class="input" type="password" required placeholder="请输入密码">
+                    </div>
+                </div>
+                <div class="field is-grouped is-grouped-right">
+                    <div class="control">
+                        <input id="submit" type="submit" class="button is-primary" value="登录">
+                    </div>
+                    <div class="control">
+                        <input type="reset" class="button is-light" value="重置">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+    </body>
+    <script>
+        showMessage = (text) => {
+            const message = document.getElementById("message")
+            const messageBody = document.getElementById("message-body")
+            messageBody.innerText = text
+            message.style.display = ""
+            setTimeout(() => {
+                message.style.display = "none"
+            }, 5000)
+        }
+        const form = document.getElementById("login")
+        form.onsubmit = async e => {
+            e.preventDefault()
+            const name = document.getElementById("name").value
+            const pass = document.getElementById("password").value
+
+            const formData = new FormData()
+            formData.append("name", name)
+            formData.append("password", pass)
+
+            const response = await fetch("/auth", {
+                method: "POST",
+                body: formData
+            })
+            const text = await response.text()
+            if (!response.ok) {
+                showMessage(text)
+            } else {
+                const now = new Date()
+                window.localStorage.setItem("JWT", JSON.stringify({
+                    JWT: text,
+                    expiredAt: now.getTime() + 7200 * 1000
+                }))
+                window.location.href = "/config?token=" + text
+            }
+            return false
+        }
+    </script>
+    </html>
+{{ end }}

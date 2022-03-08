@@ -1,0 +1,116 @@
+{{ define "pages/message.gohtml" }}
+    <!DOCTYPE html>
+    <html lang="zh">
+    {{ template "partials/header.gohtml" }}
+    <script>
+        function openTab(element, tabName) {
+            let i, x, tablinks;
+            x = document.getElementsByClassName("content-tab");
+            for (i = 0; i < x.length; i++) {
+                x[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tab");
+            for (i = 0; i < x.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" is-active", "");
+            }
+            document.getElementById(tabName).style.display = "block";
+            element.className += " is-active";
+        }
+    </script>
+    <body>
+    {{ template "partials/navbar.gohtml" }}
+    <section class="section">
+        <div class="container">
+            <h1 class="title">
+                消息
+            </h1>
+        </div>
+    </section>
+    <section>
+        <div class="container">
+            <div class="tabs">
+                <ul>
+                    <li class="tab is-active" onclick="openTab(this, 'template')">
+                        <a>测试号模板消息</a>
+                    </li>
+                    <li class="tab" onclick="openTab(this, 'plaintext')">
+                        <a>企业应用文本消息</a>
+                    </li>
+                    <li class="tab" onclick="openTab(this, 'textcard')">
+                        <a>企业应用卡片消息</a>
+                    </li>
+                </ul>
+            </div>
+            <table id="template" class="table is-hoverable is-striped content-tab">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>创建时间</th>
+                    <th>推送状态</th>
+                    <th>From</th>
+                    <th>Description</th>
+                    <th>Remark</th>
+                </tr>
+                </thead>
+                <tbody>
+                {{ range .TemplateMessages }}
+                    <tr>
+                        <th>{{ .ID }}</th>
+                        <td>{{ .CreatedAt }}</td>
+                        <td>{{ .Status }}</td>
+                        <td>{{ .From }}</td>
+                        <td>{{ .Description }}</td>
+                        <td>{{ .Remark }}</td>
+                    </tr>
+                {{ end }}
+                </tbody>
+            </table>
+            <table id="plaintext" class="table is-hoverable is-striped content-tab" style="display: none">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>创建时间</th>
+                    <th>推送状态</th>
+                    <th>Content</th>
+                </tr>
+                </thead>
+                <tbody>
+                {{ range .PlainTextMessages }}
+                    <tr>
+                        <th>{{ .ID }}</th>
+                        <td>{{ .CreatedAt }}</td>
+                        <td>{{ .Status }}</td>
+                        <td>{{ .Content }}</td>
+                    </tr>
+                {{ end }}
+                </tbody>
+            </table>
+            <table id="textcard" class="table is-hoverable is-striped content-tab" style="display: none">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>创建时间</th>
+                    <th>推送状态</th>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>CardUrl</th>
+                </tr>
+                </thead>
+                <tbody>
+                {{ range .TextCardMessages }}
+                    <tr>
+                        <th>{{ .ID }}</th>
+                        <td>{{ .CreatedAt }}</td>
+                        <td>{{ .Status }}</td>
+                        <td>{{ .Title }}</td>
+                        <td>{{ .Description }}</td>
+                        <td>{{ .Url }}</td>
+                    </tr>
+                {{ end }}
+                </tbody>
+            </table>
+        </div>
+    </section>
+    </body>
+    </html>
+{{ end }}
