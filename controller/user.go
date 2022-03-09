@@ -14,12 +14,12 @@ func Auth(ctx *gin.Context) {
 
 	user, err := model.RetrieveUserByName(name)
 	if err != nil {
-		ctx.String(http.StatusBadRequest, "User %v does not exist.", name)
+		ctx.String(http.StatusBadRequest, `用户 "%v" 不存在。`, name)
 		return
 	}
 
 	if password != user.Password {
-		ctx.String(http.StatusBadRequest, "Incorrect password.")
+		ctx.String(http.StatusBadRequest, "密码错误。")
 		return
 	}
 
@@ -41,7 +41,7 @@ func RegisterUser(ctx *gin.Context) {
 	user, err := model.CreateUser(name, password, token)
 	if err != nil {
 		log.Println(err.Error())
-		ctx.String(http.StatusBadRequest, `User "%v" already exists.`, name)
+		ctx.String(http.StatusBadRequest, `用户名 "%v" 已经存在。`, name)
 		return
 	}
 
@@ -72,7 +72,7 @@ func UpdateUser(ctx *gin.Context) {
 	_, err := model.UpdateUser(userID, newName, password, token)
 	if err != nil {
 		log.Println(err.Error())
-		ctx.String(http.StatusBadRequest, `User "%v" already exists.`, newName)
+		ctx.String(http.StatusBadRequest, `用户名 "%v" 已经存在。`, newName)
 		return
 	}
 	ctx.String(http.StatusOK, "ok")

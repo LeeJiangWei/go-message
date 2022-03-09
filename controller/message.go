@@ -46,7 +46,7 @@ func PushTemplateMessage(ctx *gin.Context) {
 	} else if res.ErrCode != 0 {
 		// 微信服务器返回错误
 		log.Println("Error occurred when pushing message: ", res.ErrCode, res.ErrMsg)
-		ctx.String(http.StatusInternalServerError, "Wechat Server: " + res.ErrMsg)
+		ctx.String(http.StatusInternalServerError, "微信服务器返回错误：" + res.ErrMsg)
 
 		_, dbErr := model.CreateTemplateMessage(user.ID, from, desc, remark, res.ErrMsg)
 		if dbErr != nil {
@@ -96,7 +96,7 @@ func PushPlainTextMessage(ctx *gin.Context) {
 	} else if res.ErrCode != 0 {
 		// 微信服务器返回错误
 		log.Println(res.ErrCode, res.ErrMsg)
-		ctx.String(http.StatusInternalServerError, "Wechat Server: "+res.ErrMsg)
+		ctx.String(http.StatusInternalServerError, "微信服务器返回错误："+res.ErrMsg)
 
 		_, dbErr := model.CreatePlainTextMessage(user.ID, content, res.ErrMsg)
 		if dbErr != nil {
@@ -155,7 +155,7 @@ func PushTextCardMessage(ctx *gin.Context) {
 	} else if res.ErrCode != 0 {
 		// 微信服务器返回错误
 		log.Println(res.ErrCode, res.ErrMsg)
-		ctx.String(http.StatusInternalServerError, "Wechat Server: "+res.ErrMsg)
+		ctx.String(http.StatusInternalServerError, "微信服务器返回错误："+res.ErrMsg)
 
 		_, dbErr := model.CreateTextCardMessage(user.ID, title, desc, u, res.ErrMsg)
 		if dbErr != nil {

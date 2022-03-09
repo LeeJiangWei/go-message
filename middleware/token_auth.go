@@ -17,7 +17,7 @@ func TokenAuth() gin.HandlerFunc {
 		} else if s, exists = ctx.GetPostForm("token"); exists {
 			token = s
 		} else {
-			ctx.String(http.StatusUnauthorized, "Empty user token.")
+			ctx.String(http.StatusUnauthorized, "未携带消息推送 Token。")
 			ctx.Abort()
 			return
 		}
@@ -26,13 +26,13 @@ func TokenAuth() gin.HandlerFunc {
 		user, err := model.RetrieveUserCacheByName(name)
 		if err != nil {
 			log.Println(err.Error())
-			ctx.String(http.StatusBadRequest, `User "%v" does not exist.`, name)
+			ctx.String(http.StatusBadRequest, `用户 "%v" 不存在。`, name)
 			ctx.Abort()
 			return
 		}
 
 		if token != user.Token {
-			ctx.String(http.StatusUnauthorized, "Incorrect user token.")
+			ctx.String(http.StatusUnauthorized, "消息推送 Token 不正确。")
 			ctx.Abort()
 			return
 		}

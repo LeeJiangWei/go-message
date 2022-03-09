@@ -20,7 +20,7 @@ func ApiJWTAuth() gin.HandlerFunc {
 		}
 
 		if token == "" {
-			ctx.String(http.StatusUnauthorized, "Empty ApiJWTAuth.")
+			ctx.String(http.StatusUnauthorized, "未携带 JWT token。")
 			ctx.Abort()
 			return
 		}
@@ -29,9 +29,9 @@ func ApiJWTAuth() gin.HandlerFunc {
 		if err != nil {
 			switch err.(*jwt.ValidationError).Errors {
 			case jwt.ValidationErrorExpired:
-				ctx.String(http.StatusUnauthorized, "Expired ApiJWTAuth.")
+				ctx.String(http.StatusUnauthorized, "JWT token 已过期。")
 			default:
-				ctx.String(http.StatusUnauthorized, "Incorrect ApiJWTAuth.")
+				ctx.String(http.StatusUnauthorized, "JWT token 不正确。")
 			}
 			ctx.Abort()
 			return
@@ -39,7 +39,7 @@ func ApiJWTAuth() gin.HandlerFunc {
 
 		user, err := model.RetrieveUserByID(claims.UserID)
 		if err != nil {
-			ctx.String(http.StatusUnauthorized, "Incorrect ApiJWTAuth.")
+			ctx.String(http.StatusUnauthorized, "JWT token 不正确。")
 			ctx.Abort()
 			return
 		}
