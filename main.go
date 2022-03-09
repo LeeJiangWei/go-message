@@ -10,6 +10,7 @@ import (
 	"html/template"
 	"log"
 	"os"
+	"strconv"
 	"time"
 )
 
@@ -65,7 +66,7 @@ func main() {
 	s.StartAsync()
 
 	log.Println("Server started.")
-	err = server.Run(":80")
+	err = server.Run(":" + strconv.Itoa(util.ServerPort))
 	if err != nil {
 		panic(err)
 	}

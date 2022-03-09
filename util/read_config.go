@@ -8,6 +8,7 @@ import (
 
 var EnableRedis bool
 var JWTConfig jwtConfigS
+var ServerPort int
 
 type jwtConfigS struct {
 	Issuer string
@@ -28,9 +29,11 @@ func ReadConfig() (err error) {
 			Secret: "GentleComet",
 			Expire: 7200 * time.Second,
 		}
+		ServerPort = 80
 
 		vp.Set("EnableRedis", false)
 		vp.Set("JWT", JWTConfig)
+		vp.Set("Port", ServerPort)
 		err = vp.SafeWriteConfigAs("config.yaml")
 		return err
 	}
@@ -42,6 +45,7 @@ func ReadConfig() (err error) {
 	JWTConfig.Expire *= time.Second
 
 	EnableRedis = vp.GetBool("EnableRedis")
+	ServerPort = vp.GetInt("Port")
 
 	return nil
 }
