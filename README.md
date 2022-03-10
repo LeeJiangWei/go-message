@@ -28,8 +28,10 @@
 2. 在 [企业信息](https://work.weixin.qq.com/wework_admin/frame#profile) 页面最下方获取企业 ID。
 3. 在 [微信插件](https://work.weixin.qq.com/wework_admin/frame#profile/wxPlugin) 页面用微信扫码关注，这样消息才会直接推送到微信上。
 4. 在 [应用管理](https://work.weixin.qq.com/wework_admin/frame#apps) 页面创建一个新应用，并获取应用的 AgentId 和 Secret。消息将通过这个应用推送。
-5. 在 [通讯录](https://work.weixin.qq.com/wework_admin/frame#contacts) 页面右侧列表中，点击自己进入详情，获取自己的账号最为接收者 ID（一般是自己名字的拼音）。
+5. 在 [通讯录](https://work.weixin.qq.com/wework_admin/frame#contacts) 页面右侧列表中，点击自己进入详情，获取自己的账号作为接收者 ID（一般是自己名字的拼音）。
 6. 卡片消息默认 URL 可以随意填写，用于卡片消息点进去的页面，但是必须要有而且要保证是合法 URL，否则微信服务器会报错。可以使用系统的主页作为 URL。
+
+注：企业微信应用支持推送至多个企业成员，配置页面的接收者 ID 填入成员 ID 列表（多个接收者用‘|’分隔，最多支持1000个），或者填入 "@all" 直接通知所有企业成员。
 
 ## 推送
 
