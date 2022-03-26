@@ -104,7 +104,7 @@
 ### Windows
 
 ```sh
-GOPROXY=https://goproxy.cn,direct GOOS=windows GOARCH=amd64 go build -o go-message go-message-pusher
+set GOPROXY=`https://goproxy.cn,direct` GOOS=windows GOARCH=amd64 | go build -o go-message.exe go-message-pusher
 ```
 
 ### Linux
