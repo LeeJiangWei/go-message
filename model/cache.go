@@ -7,6 +7,7 @@ import (
 	"github.com/go-redis/redis/v8"
 	"go-message-pusher/wechat"
 	"log"
+	"sync"
 	"time"
 )
 
@@ -14,9 +15,9 @@ var RedisEnabled bool
 
 var rdb *redis.Client
 
-var userMap map[string]User
-var appTokenMap map[string]string
-var corpTokenMap map[string]string
+var userSMap sync.Map
+var appTokenSMap sync.Map
+var corpTokenSMap sync.Map
 
 func InitCache(enableRedis bool) error {
 	RedisEnabled = enableRedis
@@ -131,7 +132,7 @@ func RetrieveAppAccessTokenCache(name string) (accessToken string, err error) {
 		}
 		return accessToken, err
 	} else {
-		accessToken, ok := appTokenMap[name]
+		accessToken, ok := appTokenSMap.Load(name)
 		if !ok {
 			// 缓存未命中，重新查数据库并向微信服务器获取
 			u, err := RetrieveUserCacheByName(name)
@@ -156,7 +157,7 @@ func RetrieveAppAccessTokenCache(name string) (accessToken string, err error) {
 			_ = UpdateAppAccessTokenCache(u.Name, r.AccessToken)
 			return r.AccessToken, nil
 		}
-		return accessToken, nil
+		return accessToken.(string), nil
 	}
 }
 func RetrieveCorpAccessTokenCache(name string) (accessToken string, err error) {
@@ -190,7 +191,7 @@ func RetrieveCorpAccessTokenCache(name string) (accessToken string, err error) {
 		return accessToken, err
 
 	} else {
-		accessToken, ok := corpTokenMap[name]
+		accessToken, ok := corpTokenSMap.Load(name)
 		if !ok {
 			// 缓存未命中，重新查数据库并向微信服务器获取
 			u, err := RetrieveUserCacheByName(name)
@@ -215,7 +216,7 @@ func RetrieveCorpAccessTokenCache(name string) (accessToken string, err error) {
 			_ = UpdateCorpAccessTokenCache(u.Name, r.AccessToken)
 			return r.AccessToken, nil
 		}
-		return accessToken, nil
+		return accessToken.(string), nil
 	}
 }
 
@@ -225,7 +226,7 @@ func UpdateAppAccessTokenCache(name, accessToken string) (err error) {
 		err = rdb.Set(ctx, "appAccessToken:"+name, accessToken, 2*time.Hour).Err()
 		return err
 	} else {
-		appTokenMap[name] = accessToken
+		appTokenSMap.Store(name, accessToken)
 		return nil
 	}
 }
@@ -236,7 +237,7 @@ func UpdateCorpAccessTokenCache(name, accessToken string) (err error) {
 		err = rdb.Set(ctx, "corpAccessToken:"+name, accessToken, 2*time.Hour).Err()
 		return
 	} else {
-		corpTokenMap[name] = accessToken
+		corpTokenSMap.Store(name, accessToken)
 		return nil
 	}
 }
@@ -271,17 +272,13 @@ func initRedis() error {
 }
 
 func initMap() error {
-	userMap = make(map[string]User)
-	appTokenMap = make(map[string]string)
-	corpTokenMap = make(map[string]string)
-
 	users, err := RetrieveAllUsers()
 	if err != nil {
 		return err
 	}
 
 	for _, u := range users {
-		userMap[u.Name] = u
+		userSMap.Store(u.Name, u)
 	}
 
 	return nil
@@ -305,8 +302,8 @@ func retrieveUserRedis(name string) (user User, err error) {
 }
 
 func retrieveUserMap(name string) (User, error) {
-	if user, ok := userMap[name]; ok {
-		return user, nil
+	if user, ok := userSMap.Load(name); ok {
+		return user.(User), nil
 	} else {
 		user, err := RetrieveUserByName(name)
 		if err != nil {
@@ -334,9 +331,10 @@ func retrieveAllUsersRedis() (users []User, err error) {
 }
 
 func retrieveAllUsersMap() (users []User, err error) {
-	for _, user := range userMap {
-		users = append(users, user)
-	}
+	userSMap.Range(func(k, v interface{}) bool {
+		users = append(users, v.(User))
+		return true
+	})
 	return
 }
 
@@ -353,7 +351,7 @@ func updateUserRedis(u User) error {
 }
 
 func updateUserMap(u User) error {
-	userMap[u.Name] = u
+	userSMap.Store(u.Name, u)
 	return nil
 }
 
@@ -364,8 +362,8 @@ func deleteUserRedis(name string) error {
 }
 
 func deleteUserMap(name string) error {
-	delete(userMap, name)
-	delete(appTokenMap, name)
-	delete(corpTokenMap, name)
+	userSMap.Delete(name)
+	appTokenSMap.Delete(name)
+	corpTokenSMap.Delete(name)
 	return nil
 }

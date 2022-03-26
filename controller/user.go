@@ -60,9 +60,6 @@ func RegisterUser(ctx *gin.Context) {
 func UpdateUser(ctx *gin.Context) {
 	user := ctx.MustGet("user").(model.User)
 
-	// 删除缓存
-	_ = model.DeleteUserCacheByName(user.Name)
-
 	userID := user.ID
 	newName := ctx.PostForm("name")
 	password := ctx.PostForm("password")
@@ -75,14 +72,15 @@ func UpdateUser(ctx *gin.Context) {
 		ctx.String(http.StatusBadRequest, `用户名 "%v" 已经存在。`, newName)
 		return
 	}
+
+	// 删除缓存
+	_ = model.DeleteUserCacheByName(user.Name)
+
 	ctx.String(http.StatusOK, "ok")
 }
 
 func UpdateUserApp(ctx *gin.Context) {
 	user := ctx.MustGet("user").(model.User)
-
-	// 删除缓存
-	_ = model.DeleteUserCacheByName(user.Name)
 
 	userID := user.ID
 	appID := ctx.PostForm("appID")
@@ -98,14 +96,15 @@ func UpdateUserApp(ctx *gin.Context) {
 		ctx.String(http.StatusBadRequest, err.Error())
 		return
 	}
+
+	// 删除缓存
+	_ = model.DeleteUserCacheByName(user.Name)
+
 	ctx.String(http.StatusOK, "ok")
 }
 
 func UpdateUserCorp(ctx *gin.Context) {
 	user := ctx.MustGet("user").(model.User)
-
-	// 删除缓存
-	_ = model.DeleteUserCacheByName(user.Name)
 
 	userID := user.ID
 	corpID := ctx.PostForm("corpID")
@@ -121,5 +120,9 @@ func UpdateUserCorp(ctx *gin.Context) {
 		ctx.String(http.StatusBadRequest, err.Error())
 		return
 	}
+
+	// 删除缓存
+	_ = model.DeleteUserCacheByName(user.Name)
+
 	ctx.String(http.StatusOK, "ok")
 }
